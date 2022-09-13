@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 
-echo "$0 $1 $2"
+# echo "$0 $1 $2"
 FILESDIR=$1
 SEARCHSTR=$2
 FILES_BELOW="files_before_filter"
@@ -13,10 +13,8 @@ then
     exit 1
 fi
 
-if [ -d $FILESDIR ]
+if [ ! -d $FILESDIR ]
 then
-    echo "$1"
-else
     echo "$1 is not a directory"
     exit 1
 fi
@@ -27,12 +25,12 @@ touch $FILES_BELOW
 
 find $FILESDIR -type f > $FILES_BELOW
 # ls $FILESDIR -l > $FILES_BELOW
-echo "All files below $1:"
+# echo "All files below $1:"
 cat $FILES_BELOW
 NUMBER_FILES=$( wc -l $FILES_BELOW | awk '{print $1;}' )
 
 grep $SEARCHSTR $FILESDIR -r > $FILES_SEARCHED
-echo "All searched files:"
+# echo "All searched files:"
 cat $FILES_SEARCHED
 NUMBER_SEARCHED=$( wc -l $FILES_SEARCHED | awk '{print $1;}' )
 
