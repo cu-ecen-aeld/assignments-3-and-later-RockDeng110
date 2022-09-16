@@ -1,4 +1,12 @@
 #include "systemcalls.h"
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <stdlib.h>
+
+
 
 /**
  * @param cmd the command to execute with system()
@@ -17,6 +25,12 @@ bool do_system(const char *cmd)
  *   or false() if it returned a failure
 */
 
+    int rv;
+    rv = system(cmd);
+    if (rv == -1)
+    {
+        return false;
+    }
     return true;
 }
 
@@ -43,6 +57,7 @@ bool do_exec(int count, ...)
     for(i=0; i<count; i++)
     {
         command[i] = va_arg(args, char *);
+        printf("command[%d]:%s\n", i, command[i]);
     }
     command[count] = NULL;
     // this line is to avoid a compile warning before your implementation is complete
@@ -58,10 +73,34 @@ bool do_exec(int count, ...)
  *   as second argument to the execv() command.
  *
 */
+    pid_t pid;
+    int status;
+    
+    pid = fork();
+    if (pid == -1)
+        return false;
+    else if (pid == 0) {
+        if (execv(command[0], command) == -1) {
+            printf("(%s) execv failed\n", __FUNCTION__);
+            exit(EXIT_FAILURE);
+        }
+        exit(EXIT_SUCCESS);
+    }
 
     va_end(args);
 
-    return true;
+    if (waitpid(pid, &status, 0) == -1)
+        return false;
+    else if (WIFEXITED(status)) {
+        printf("(%s) exitstatus %d\n", __FUNCTION__, WEXITSTATUS(status));
+        if (WEXITSTATUS(status) == EXIT_FAILURE) {
+            printf("(%s) return -1\n", __FUNCTION__);
+            return false; 
+        }
+        return true;
+    }
+
+    return false;
 }
 
 /**
@@ -92,8 +131,37 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
  *   The rest of the behaviour is same as do_exec()
  *
 */
+    pid_t pid;
+    int status;
+    
+    int fd = open(outputfile, O_WRONLY|O_TRUNC|O_CREAT, 0644);
+    if (fd < 0) { perror("open"); abort(); }
+
+    pid = fork();
+    if (pid == -1)
+        return false;
+    else if (pid == 0) {
+        if (dup2(fd, 1) < 0) { perror("dup2"); abort(); }
+        close(fd);
+        if (execv(command[0], command) == -1) {
+            printf("(%s) execv failed\n", __FUNCTION__);
+            exit(EXIT_FAILURE);
+        }
+        exit(EXIT_SUCCESS);
+    }
 
     va_end(args);
 
-    return true;
+    if (waitpid(pid, &status, 0) == -1)
+        return false;
+    else if (WIFEXITED(status)) {
+        printf("(%s) exitstatus %d\n", __FUNCTION__, WEXITSTATUS(status));
+        if (WEXITSTATUS(status) == EXIT_FAILURE) {
+            printf("(%s) return -1\n", __FUNCTION__);
+            return false; 
+        }
+        return true;
+    }
+
+    return false;
 }
