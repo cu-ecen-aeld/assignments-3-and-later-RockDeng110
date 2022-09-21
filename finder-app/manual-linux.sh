@@ -96,6 +96,9 @@ cd "${OUTDIR}/rootfs"
 ${CROSS_COMPILE}readelf -a bin/busybox | grep "program interpreter"
 ${CROSS_COMPILE}readelf -a bin/busybox | grep "Shared library"
 
+echo whoami
+whoami
+ls -al $SYSROOT/lib
 # TODO: Add library dependencies to rootfs
 echo "add Library dependencies to rootfs"
 cp -a $SYSROOT/lib/ld-linux-aarch64.so.1 lib
