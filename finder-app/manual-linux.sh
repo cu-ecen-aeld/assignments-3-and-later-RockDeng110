@@ -12,7 +12,9 @@ BUSYBOX_VERSION=1_33_1
 FINDER_APP_DIR=$(realpath $(dirname $0))
 ARCH=arm64
 CROSS_COMPILE=aarch64-none-linux-gnu-
-SYSROOT=/home/rock/gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu/bin/../aarch64-none-linux-gnu/libc
+# SYSROOT=/home/rock/gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu/bin/../aarch64-none-linux-gnu/libc
+SYSROOT=$(${CROSS_COMPILE}gcc -print-sysroot)
+echo "sysroot:${SYSROOT}"
 
 if [ $# -lt 1 ]
 then
