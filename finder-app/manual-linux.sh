@@ -122,7 +122,13 @@ sudo mknod -m 666 dev/console c 5 1
 # TODO: Clean and build the writer utility
 echo "clean and build the writer utility"
 cd ${FINDER_APP_DIR}
-make clean
+if [ -e ./writer ]
+then
+    echo "clean writer and writer.o"
+    make clean
+else
+    echo "no need to clean"
+fi
 make CROSS_COMPILE=aarch64-none-linux-gnu-
 
 # TODO: Copy the finder related scripts and executables to the /home directory
