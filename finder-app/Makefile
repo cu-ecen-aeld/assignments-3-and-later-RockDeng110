@@ -9,5 +9,7 @@ writer: writer.o
 writer.o: writer.c
 	$(CC) -c writer.c
 
+all: writer
+
 clean:
 	rm writer writer.o
