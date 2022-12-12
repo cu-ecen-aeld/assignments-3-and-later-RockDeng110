@@ -22,7 +22,7 @@ $(APP_CLIENT): $(OBJS_CLIENT)
 	$(CC) $(CFLAGS) $(OBJS_CLIENT) -o $(APP_CLIENT) 
 
 clean:
-	rm $(APP_CLIENT) $(APP_SERVER) $(OBJS_CLIENT) $(OBJS_SERVER)
+	rm -rf $(APP_CLIENT) $(APP_SERVER) $(OBJS_CLIENT) $(OBJS_SERVER)
 
 %.o : %.c
 	$(CC) $(CFLAGS) -c $<
