@@ -225,19 +225,19 @@ static void skeleton_daemon()
     //signal(SIGCHLD, SIG_IGN);
     //signal(SIGHUP, SIG_IGN);
 
-    /* Fork off for the second time*/
-    pid = fork();
+    ///* Fork off for the second time*/
+    //pid = fork();
 
-    /* An error occurred */
-    if (pid < 0)
-        exit(EXIT_FAILURE);
+    ///* An error occurred */
+    //if (pid < 0)
+    //    exit(EXIT_FAILURE);
 
-    /* Success: Let the parent terminate */
-    if (pid > 0)
-        exit(EXIT_SUCCESS);
+    ///* Success: Let the parent terminate */
+    //if (pid > 0)
+    //    exit(EXIT_SUCCESS);
 
     /* Set new file permissions */
-    umask(0);
+    //umask(0);
 
     /* Change the working directory to the root directory */
     /* or another appropriated directory */
