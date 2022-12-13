@@ -213,8 +213,11 @@ static void skeleton_daemon()
         exit(EXIT_FAILURE);
 
      /* Success: Let the parent terminate */
-    if (pid > 0)
+    if (pid > 0){
+        sleep(5);
+        printf("exit from parent\n");
         exit(EXIT_SUCCESS);
+    }
 
     /* On success: The child process becomes session leader */
     if (setsid() < 0)
